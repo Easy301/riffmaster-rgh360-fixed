@@ -1,0 +1,34 @@
+# Build output. bin/riffmaster.xex is committed deliberately - it is the prebuilt plugin
+# for people who do not want to install the XDK - so it is force-added below.
+patch-work/
+tools/xextool.exe
+bin/*-decrypted.xex
+bin/riffmaster-original.xex
+bin/riffmaster-patched.xex
+bin/riffmaster-coexist*.xex
+bin/riffmaster-giponly.xex
+bin/desktop-working-decrypted.xex
+
+src/riffmaster/Release Retail/
+src/riffmaster/*.pdb
+src/riffmaster/*.xdb
+src/riffmaster/*.pch
+src/riffmaster/*.ipch
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+
+# Windows / editors
+Thumbs.db
+desktop.ini
+*.swp
+*~
+
+# The prebuilt plugin IS shipped - keep it despite the rules above.
+!bin/riffmaster.xex
