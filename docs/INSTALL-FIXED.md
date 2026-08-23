@@ -2,7 +2,7 @@
 
 ## Easiest: GitHub Release
 
-1. Open **[Releases](https://github.com/PLACEHOLDER/riffmaster-rgh360-fixed/releases)** on this repo.
+1. Open **[Releases](https://github.com/Easy301/riffmaster-rgh360-fixed/releases)** on this repo.
 2. Download **`riffmaster.xex`** from the latest release.
 3. Copy it to your Xbox 360 as:
    ```

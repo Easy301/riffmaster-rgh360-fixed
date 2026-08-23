@@ -76,7 +76,7 @@ Full detail in [docs/KNOWN_ISSUES.md](docs/KNOWN_ISSUES.md):
 ## Install
 
 **End users (no XDK):** download **`riffmaster.xex`** from
-**[GitHub Releases](https://github.com/PLACEHOLDER/riffmaster-rgh360-fixed/releases/latest)**
+**[GitHub Releases](https://github.com/Easy301/riffmaster-rgh360-fixed/releases/latest)**
 and follow [docs/INSTALL-FIXED.md](docs/INSTALL-FIXED.md).
 
 Full install guide and troubleshooting: [docs/INSTALL.md](docs/INSTALL.md). Building from
