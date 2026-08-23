@@ -1,26 +1,18 @@
-# `bin/` — prebuilt plugin
+# Prebuilt plugin
 
-| File | Purpose |
+| File | Description |
 |---|---|
-| **`riffmaster.xex`** | **Install this.** Patched retail build (~94 KB). Same file attached to GitHub Releases. |
+| **`riffmaster.xex`** | Patched retail build (~94 KB). Same file attached to [GitHub Releases](https://github.com/Easy301/riffmaster-rgh360-fixed/releases). |
 
-## Verified build (2026-08-22)
+Use this file for installation. The original unpatched release from Durg5's repository is
+~324 KB and does not include the fixes in this project.
+
+## Build info (2026-08-22)
 
 - **MD5:** `F5BA2366FD6D1630375DF5F3AD91A4E0`
 - **Size:** 96,256 bytes
-- **Fixes:** RSA self-test, GIP-only (no CRKD mapping popup), HID ReadState pass-through
-
-## Do not install the wrong file
-
-| Size | Meaning |
-|---|---|
-| ~94 KB | Patched encrypted retail xex — **correct** |
-| ~324 KB | Stock upstream unpatched — auth / CRKD issues |
-
-Unpatched upstream builds are available from
-[Durg5/riffmaster-rgh360](https://github.com/Durg5/riffmaster-rgh360/releases).
 
 ## Rebuild without the XDK
 
-1. Place an unpatched upstream xex as `bin/riffmaster-upstream.xex`
+1. Place the original unpatched xex as `bin/riffmaster-upstream.xex`
 2. Run `python tools/apply_full_patch.py` (requires `tools/xextool.exe`)

@@ -106,9 +106,11 @@ citable source, rather than to somebody's memory. If you add one, cite it.
 Two defects were found in inherited code during this work. Both are noted in the source
 where they occur, and both are worth reporting upstream:
 
-1. **`XamInputGetCapabilities` (400) and `XamInputGetState` (401) are not hooked.** Only
-   402 and 685 are. Titles using the non-`Ex` entry points — Rock Band among them — see no
-   device at all.
+1. **`XamInputGetCapabilities` (400) and `XamInputGetState` (401) were not hooked in
+   hiddriver360.** Only 402 and 685 were. Titles using the non-`Ex` entry points — Rock
+   Band among them — would see no device. **Durg5's riffmaster-rgh360 already hooks 400
+   and 401**; this fork inherits that fix. The note is kept for attribution to the
+   inherited codebase.
 2. **`XamInputGetCapabilitiesExHook` falls off the end of a non-void function** on its most
    common path (a real, connected controller, queried ~8 times per 100 ms). It has worked
    by accident because MSVC leaves the status value in `r3`; that is register allocation,

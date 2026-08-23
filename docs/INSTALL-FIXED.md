@@ -1,48 +1,135 @@
-# Install (patched build)
+# Installation Guide
 
-## Easiest: GitHub Release
+This guide is for the **patched** `riffmaster.xex` from
+**[Releases](https://github.com/Easy301/riffmaster-rgh360-fixed/releases)**.
 
-1. Open **[Releases](https://github.com/Easy301/riffmaster-rgh360-fixed/releases)** on this repo.
-2. Download **`riffmaster.xex`** from the latest release.
-3. Copy it to your Xbox 360 as:
-   ```
-   Hdd:\riffmaster.xex
-   ```
-4. Add to `launch.ini` (example):
-   ```ini
-   [Plugins]
-   plugin1 = Hdd:\UsbdSecPatch.xex
-   plugin2 = Hdd:\Debug\Xbdm.xex
-   plugin3 = Hdd:\riffmaster.xex
-   ```
-5. **Hard reboot** (full power off).
-6. Plug the **RiffMaster dongle**, turn the **guitar** on, wait ~10 seconds.
+---
 
-**UsbdSecPatch** can stay enabled. This build lets RiffMaster and CRKD-style guitars
-work together without the mapping popup.
+## Before you start
 
-## From `bin/` in this repo
+| Requirement | Detail |
+|---|---|
+| Console | RGH or JTAG Xbox 360 |
+| Software | DashLaunch with plugin support |
+| Kernel | **17559** (retail) or **17489** (devkit) |
+| Hardware | PDP RiffMaster guitar + USB dongle |
+| Boot | Disc tray closed when you power on |
 
-Same file: `bin/riffmaster.xex` (~94 KB, retail encrypted).
+Back up your `launch.ini` before making changes.
 
-## Requirements
+---
 
-Same as upstream — see [INSTALL.md](INSTALL.md):
+## 1. Download the correct file
 
-- RGH/JTAG 360, kernel **17559** (retail) or **17489** (devkit)
-- DashLaunch with plugins enabled
-- PDP RiffMaster dongle (VID `0E6F`, PID `0248`)
-- Disc tray closed at boot
+From **[Releases](https://github.com/Easy301/riffmaster-rgh360-fixed/releases)**,
+download **`riffmaster.xex`**.
 
-## What this build fixes
+| File size | What it is |
+|---|---|
+| **~94 KB** | Patched build from this repo — **use this** |
+| **~324 KB** | Original unpatched release — missing fixes most users need |
 
-See [CHANGELOG.md](../CHANGELOG.md).
+---
+
+## 2. Copy to your Xbox
+
+Place the file so the console sees it at:
+
+```
+Hdd:\riffmaster.xex
+```
+
+Common methods: FTP (Aurora/FSD), Xbox 360 Neighborhood, FATXplorer, or USB transfer.
+
+After copying, confirm the file size on the console side matches (~94 KB). A partial
+copy often looks like "the plugin does nothing."
+
+---
+
+## 3. Enable the plugin
+
+### Option A — DashLaunch (recommended)
+
+1. Boot to your dashboard
+2. Open **DashLaunch**
+3. Go to **Plugins**
+4. Select an empty slot and set the path to `Hdd:\riffmaster.xex`
+5. **Save** `launch.ini` to the HDD
+
+### Option B — Edit `launch.ini`
+
+Add one line under `[Plugins]` in any free slot:
+
+```ini
+[Plugins]
+plugin1 = Hdd:\UsbdSecPatch.xex
+plugin2 = Hdd:\riffmaster.xex
+```
+
+Adjust slot numbers and paths to match your setup. Keep plugins you still need.
+
+> If you edit from inside DashLaunch, you must save explicitly. Unsaved changes are lost.
+
+---
+
+## 4. Hard reboot
+
+Power the console fully off, then back on. A soft reboot may not reload a changed plugin.
+
+---
+
+## 5. Connect the guitar
+
+1. Plug in the **RiffMaster dongle**
+2. Turn the **guitar** on
+3. Wait a few seconds for authentication
+4. Test the strum bar on the dashboard
+
+---
+
+## Using a second guitar (UsbdSecPatch)
+
+If you also play on other third-party guitars that require **UsbdSecPatch** on a modded
+360 (for example CRKD-type guitars), leave UsbdSecPatch enabled alongside riffmaster:
+
+```ini
+plugin1 = Hdd:\UsbdSecPatch.xex
+plugin2 = Hdd:\riffmaster.xex
+```
+
+This patched build is designed for that setup — second guitars stay responsive while
+riffmaster remains loaded.
+
+---
 
 ## Troubleshooting
 
-| Symptom | Check |
+| Problem | Likely cause |
 |---|---|
-| Mapping popup on CRKD | Wrong xex — use Release `riffmaster.xex` (~94 KB), not stock upstream (~324 KB) |
-| RiffMaster no auth | Old unpatched xex; look for `RSA SELFTEST: FAIL` with no `AUTH HANDSHAKE COMPLETE` in xbdm log |
-| CRKD dead in dash | Same — need ReadState pass-through fix (this release) |
-| Nothing loads | Tray open at boot, wrong kernel, or plugin path in `launch.ini` |
+| Plugin does nothing | `launch.ini` not saved, wrong file path, or tray was open at boot |
+| Wrong kernel | Plugin only loads on kernel 17559 or 17489 |
+| Guitar does not work on the 360 | Downloaded the original ~324 KB file instead of this ~94 KB patched build |
+| Second guitar unresponsive while riffmaster is loaded | Use the patched release from this repo (~94 KB) |
+
+For advanced troubleshooting (base address conflicts, debug logging, etc.), see
+[INSTALL.md](INSTALL.md) from the original project.
+
+---
+
+## What this build fixes
+
+*Technical summary — skip if you only need the install steps above.*
+
+### RiffMaster authentication
+
+On the original release, the guitar often failed to work when connected to the 360 — the
+dongle may look paired, but the console never receives input. This build corrects that.
+
+### Coexistence with UsbdSecPatch
+
+The original release can intercept unknown USB controllers for its own HID mapping layer.
+Second guitars that rely on UsbdSecPatch (e.g. CRKD) became unresponsive and unusable
+unless riffmaster was unloaded. This build limits riffmaster to the RiffMaster GIP path
+so both plugins can run together.
+
+Source changes and patch offsets: [CHANGELOG.md](../CHANGELOG.md)

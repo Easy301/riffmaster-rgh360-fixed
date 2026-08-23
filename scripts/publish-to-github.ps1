@@ -17,7 +17,7 @@ Write-Host "GitHub user: $User"
 
 # Create private repo if remote missing
 if (-not (git remote get-url origin 2>$null)) {
-    gh repo create $RepoName --private --source=. --remote=origin --description "Patched riffmaster-rgh360: RSA auth + UsbdSecPatch/CRKD coexistence"
+    gh repo create $RepoName --private --source=. --remote=origin --description "Patched riffmaster-rgh360: RiffMaster auth fix for Xbox 360"
 }
 
 git branch -M main
@@ -29,7 +29,7 @@ $Notes = $Notes -replace "PLACEHOLDER", $User
 
 gh release create "v1.0.0-fixed" `
     "$Root\bin\riffmaster.xex" `
-    --title "v1.0.0-fixed — RiffMaster + CRKD coexistence" `
+    --title "v1.0.0-fixed — Patched RiffMaster driver" `
     --notes $Notes
 
 Write-Host ""

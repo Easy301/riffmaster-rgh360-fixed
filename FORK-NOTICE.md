@@ -1,29 +1,51 @@
-# Fork notice
+# About This Release
 
-This repository is a **community patch fork** of
-**[Durg5/riffmaster-rgh360](https://github.com/Durg5/riffmaster-rgh360)**.
+This is a **patched community release** of
+**[Durg5/riffmaster-rgh360](https://github.com/Durg5/riffmaster-rgh360)**, which is based
+on **[EinTim23/hiddriver360](https://github.com/EinTim23/hiddriver360)**.
 
-The upstream project is a fork of **[EinTim23/hiddriver360](https://github.com/EinTim23/hiddriver360)**.
-Almost all of the engineering credit belongs to those authors and the projects
-listed in [NOTICE.md](NOTICE.md).
+Durg5 and EinTim23 did the engineering that makes a RiffMaster guitar work on Xbox 360.
+I added three targeted fixes for hardware setups the original patch did not support on my
+console. See [CREDITS.md](CREDITS.md).
 
-## What this fork adds
+---
 
-Three fixes for real-world setups that upstream did not cover when this fork was
-created:
+## Why this release exists
 
-- RiffMaster units whose RSA self-test fails due to a different (valid) cert
-- Using **UsbdSecPatch** with a **CRKD** (or similar) guitar alongside RiffMaster
-- Dashboard input for those guitars while riffmaster stays loaded in DashLaunch
+### RiffMaster authentication
 
-See [CHANGELOG.md](CHANGELOG.md) for technical detail.
+On many real RiffMaster units, the original release fails during the GIP auth handshake.
+The guitar looks paired to the dongle, but the Xbox never receives button input.
 
-## Relationship to upstream
+This release allows authentication to continue when a guitar's certificate is valid but
+differs from the one used during the original author's testing.
 
-- **Not an official release** from Durg5 or EinTim23
-- Intended to be merged upstream or published separately after review
-- If upstream adopts these fixes, prefer their release over this fork
+### UsbdSecPatch coexistence
 
-## Licence
+Some players use **UsbdSecPatch** for other third-party guitars on the same modded console
+(for example CRKD-type instruments). With the original release loaded, those guitars were
+unresponsive and unusable unless riffmaster was unloaded — often with a mapping popup on
+the dashboard. This release lets the RiffMaster dongle and UsbdSecPatch-based guitars
+operate in parallel.
 
-GPL-3.0, same as upstream. See [LICENSE](LICENSE).
+---
+
+## Changes in this release
+
+| Fix | Summary |
+|---|---|
+| RSA self-test | Auth no longer aborts on a different (valid) device certificate |
+| GIP-only mode | HID detours and mapping assistant disabled by default |
+| ReadState pass-through | UsbdSecPatch guitars keep working while riffmaster is loaded |
+
+Full technical detail: [CHANGELOG.md](CHANGELOG.md)
+
+---
+
+## Relationship to the original project
+
+- Not an official release from Durg5 or EinTim23
+- Offered for community testing and feedback
+- If the original author incorporates these fixes, prefer their release going forward
+
+Licensed under **GPL-3.0**, same as the original project. See [LICENSE](LICENSE).

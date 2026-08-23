@@ -1,22 +1,22 @@
 # Credits
 
-## Where the work came from
+## Primary authors
 
-**The overwhelming majority of this repository is upstream work.** This fork exists because
-three real-world bugs blocked Gregory's setup (RiffMaster + UsbdSecPatch + CRKD on one
-console). The fixes are small; the engineering that makes a RiffMaster guitar work on an
-Xbox 360 at all is not.
+The RiffMaster Xbox 360 driver exists because of two projects:
 
-### Primary authors (please support them)
-
-| Who | Project | Role |
+| Author | Project | Contribution |
 |---|---|---|
-| **[Durg5](https://github.com/Durg5)** | [riffmaster-rgh360](https://github.com/Durg5/riffmaster-rgh360) | RiffMaster GIP driver, auth, input mapping, game table — **the project this fork is based on** |
-| **[EinTim23](https://github.com/EinTim23)** | [hiddriver360](https://github.com/EinTim23/hiddriver360) | DashLaunch USB detours, virtual XAM controller — **the foundation everything inherits** |
+| **[Durg5](https://github.com/Durg5)** | [riffmaster-rgh360](https://github.com/Durg5/riffmaster-rgh360) | RiffMaster GIP protocol, USB claim, RSA auth, input mapping, game compatibility |
+| **[EinTim23](https://github.com/EinTim23)** | [hiddriver360](https://github.com/EinTim23/hiddriver360) | DashLaunch plugin architecture, USB detours, virtual XAM controller registration |
 
-### Full upstream chain
+**The majority of thanks belongs to Durg5 and EinTim23.** This patched release would not
+exist without their work.
 
-See [NOTICE.md](NOTICE.md) and the Credits section of [README.md](README.md) for:
+---
+
+## Broader attribution
+
+The original project also credits:
 
 - jpdown / hiddriver360-rb1wii
 - TheNathannator (PlasticBand, RB4InstrumentMapper)
@@ -24,18 +24,20 @@ See [NOTICE.md](NOTICE.md) and the Credits section of [README.md](README.md) for
 - iMoD1998 (Detours)
 - Xenia, DashLaunch, RapidJSON, xkelib, xextool, and others
 
-If you find this useful, **star and support those projects first.**
+See [NOTICE.md](NOTICE.md) and the [original README](https://github.com/Durg5/riffmaster-rgh360#credits).
 
-## This fork
+---
 
-| Who | Role |
+## This release
+
+| Contributor | Role |
 |---|---|
-| **Gregory** | Hardware testing, requirements, and maintaining this patched release |
-| **Community debugging / patching** | RSA self-test fix, GIP-only mode, XInput ReadState pass-through — documented in [CHANGELOG.md](CHANGELOG.md) |
+| **Gregory** | Hardware testing, patches, and maintaining this release |
 
-This fork is **not** an official release from Durg5 or EinTim23. It is offered for review
-and, if accepted, may be merged upstream or published publicly so others with the same
-setup can use it without building.
+I added three small fixes on top of Durg5's original driver for setups that did not work
+on my console. This is not an official build from Durg5 or EinTim23.
+
+---
 
 ## Licence
 
