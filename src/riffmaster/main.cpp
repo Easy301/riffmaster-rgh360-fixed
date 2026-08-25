@@ -83,6 +83,18 @@
 #define RIFFMASTER_GIP_ONLY 1
 #endif
 
+// Mapping-assistant XNotify (custom type 80 + JRPC2 branch patch). GIP-only never
+// shows that UI, and the notify dispatch patch runs on EVERY USB arrival — including
+// CRKD / UsbdSecPatch guitars — which can freeze the dash when XAM's network stack is
+// busy. Skipping it restores stock XAM notify behaviour. It does not affect GIP claim,
+// auth, XAM guitar bind, or native UsbdSecPatch devices.
+// Define RIFFMASTER_FORCE_NOTIFY_PATCH to restore the upstream writes.
+#if defined(RIFFMASTER_GIP_ONLY) && !defined(RIFFMASTER_FORCE_NOTIFY_PATCH)
+#ifndef RIFFMASTER_NO_NOTIFY_PATCH
+#define RIFFMASTER_NO_NOTIFY_PATCH 1
+#endif
+#endif
+
 // ---------------------------------------------------------------------------
 // Logging levels.
 //
@@ -115,8 +127,9 @@
 #define RM_DBG(...) ((void)0)
 #endif
 
-// Coexist logging: always on, rate-limited. Used to see whether riffmaster is
-// touching CRKD / UsbdSecPatch devices (HID claim vs GIP-only vs pass-through).
+// Coexist logging: RM_DBG only. These run inside UsbdAddDeviceComplete (USB
+// completion / raised IRQL). DbgPrint goes out over xbdm and takes the XAM net
+// lock — the same hang class as printing from UsbdRemoveDeviceCompleteHook.
 #define RM_COEXIST_MAX 48
 static int g_coexistLogCount = 0;
 
@@ -129,14 +142,14 @@ static void RmLogCoexistUsb(const char* tag, deviceHandle* h, int status,
 	uint16_t vid = swap_endianness_16(dd->idVendor);
 	uint16_t pid = swap_endianness_16(dd->idProduct);
 	if (id) {
-		RM_LOG("RIFFMASTER: COEXIST %s status=0x%08X h=%p VID=%04X PID=%04X "
+		RM_DBG("RIFFMASTER: COEXIST %s status=0x%08X h=%p VID=%04X PID=%04X "
 			"iface=%02X/%02X/%02X ep=%d\r\n",
 			tag, status, h, vid, pid,
 			id->bInterfaceClass, id->bInterfaceSubClass, id->bInterfaceProtocol,
 			id->bNumEndpoints);
 	}
 	else {
-		RM_LOG("RIFFMASTER: COEXIST %s status=0x%08X h=%p VID=%04X PID=%04X (no iface)\r\n",
+		RM_DBG("RIFFMASTER: COEXIST %s status=0x%08X h=%p VID=%04X PID=%04X (no iface)\r\n",
 			tag, status, h, vid, pid);
 	}
 }
@@ -1749,7 +1762,7 @@ static void GipUnregisterFromXam();
 static void GipRsaSelfTest() {
 	// Auth payload = 10-byte header (handshake 6 + data 4) then the DER certificate.
 	if (g_gipCertBytes <= 10) {
-		RM_LOG("RIFFMASTER: RSA selftest skipped - no certificate\r\n");
+		RM_DBG("RIFFMASTER: RSA selftest skipped - no certificate\r\n");
 		return;
 	}
 	const BYTE* der = g_gipCertBuf + 10;
@@ -1758,7 +1771,7 @@ static void GipRsaSelfTest() {
 	static BYTE modulus[RSA2048_BYTES];
 	uint32_t pubExp = 0;
 	if (!GipCertGetRsaPubKey(der, derLen, modulus, &pubExp)) {
-		RM_LOG("RIFFMASTER: RSA selftest FAILED - could not parse pubkey from cert\r\n");
+		RM_DBG("RIFFMASTER: RSA selftest FAILED - could not parse pubkey from cert\r\n");
 		return;
 	}
 	RM_DBG("RIFFMASTER: cert pubkey parsed: exponent=%u modulus starts %02X%02X%02X%02X\r\n",
@@ -1772,7 +1785,7 @@ static void GipRsaSelfTest() {
 	static BYTE outB[RSA2048_BYTES];
 	memset(msg, 0xAA, sizeof(msg));
 	if (!GipPkcs1Pad(msg, sizeof(msg), em, true)) {
-		RM_LOG("RIFFMASTER: RSA selftest FAILED - padding\r\n");
+		RM_DBG("RIFFMASTER: RSA selftest FAILED - padding\r\n");
 		return;
 	}
 
@@ -1786,13 +1799,13 @@ static void GipRsaSelfTest() {
 	static const BYTE expect[8] = { 0xCA,0xFA,0x27,0x9B,0x03,0x68,0x3F,0x84 };
 	bool knownAnswer = ok && !memcmp(outA, expect, 8);
 	if (!ok) {
-		RM_LOG("RIFFMASTER: *** RSA SELFTEST: FAIL (modexp error) ***\r\n");
+		RM_DBG("RIFFMASTER: *** RSA SELFTEST: FAIL (modexp error) ***\r\n");
 		return;
 	}
 	if (knownAnswer)
-		RM_LOG("RIFFMASTER: *** RSA SELFTEST: PASS ***\r\n");
+		RM_DBG("RIFFMASTER: *** RSA SELFTEST: PASS ***\r\n");
 	else {
-		RM_LOG("RIFFMASTER: *** RSA SELFTEST: PASS (device cert differs from reference) ***\r\n");
+		RM_DBG("RIFFMASTER: *** RSA SELFTEST: PASS (device cert differs from reference) ***\r\n");
 		RM_DBG("RIFFMASTER: known-answer mismatch - not fatal, continuing auth\r\n");
 		if (ok)
 			GipHexDump("rsa", outA, 32);
@@ -1811,11 +1824,11 @@ static void GipRsaSelfTest() {
 	memcpy(g_gipPms, pms, sizeof(pms));      // kept for the PRF / master secret
 
 	if (!GipPkcs1Pad(pms, sizeof(pms), em, false)) {
-		RM_LOG("RIFFMASTER: HOST_SECRET padding failed\r\n");
+		RM_DBG("RIFFMASTER: HOST_SECRET padding failed\r\n");
 		return;
 	}
 	if (!GipRsaPubCrypt(modulus, pubExp, em, pkt + 10)) {
-		RM_LOG("RIFFMASTER: HOST_SECRET RSA failed\r\n");
+		RM_DBG("RIFFMASTER: HOST_SECRET RSA failed\r\n");
 		return;
 	}
 
@@ -1905,7 +1918,7 @@ static void RmLogHidSlotSummary() {
 		if (connectedControllers[i].controllerDriver)
 			used++;
 	}
-	RM_LOG("RIFFMASTER: COEXIST HID slots in use: %d/4  GIP XAM user=%d\r\n",
+	RM_DBG("RIFFMASTER: COEXIST HID slots in use: %d/4  GIP XAM user=%d\r\n",
 		used, (g_gipUserIndex == 0xFF) ? -1 : (int)g_gipUserIndex);
 }
 
@@ -2116,14 +2129,14 @@ static void GipRegisterWithXam() {
 	XamUserBindDeviceCallback(0xa7553952 + GIP_XAM_BIND_MAGIC, GIP_DEVICE_CONTEXT, 0, false, &userIndex);
 
 	if (userIndex == 0xFF || userIndex >= 4) {
-		RM_LOG("RIFFMASTER: XAM bind FAILED (userIndex=%d) - unplug other controllers and hard reboot\r\n",
+		RM_DBG("RIFFMASTER: XAM bind FAILED (userIndex=%d) - unplug other controllers and hard reboot\r\n",
 			userIndex);
 		return;
 	}
 
 	g_gipUserIndex = userIndex;
 	g_gipDeviceContext = GIP_DEVICE_CONTEXT;
-	RM_LOG("RIFFMASTER: *** registered virtual GUITAR in XAM, user index %d ***\r\n",
+	RM_DBG("RIFFMASTER: *** registered virtual GUITAR in XAM, user index %d ***\r\n",
 		userIndex);
 	RmLogHidSlotSummary();
 }
@@ -2570,7 +2583,7 @@ static void GipHandleTransfer(const BYTE* data, int len) {
 						GipSend(g_gipExt.deviceHandle, GIP_CMD_AUTHENTICATE,
 							GIP_OPT_INTERNAL, done, sizeof(done));
 						g_gipAuthStage = 7;
-						RM_LOG("RIFFMASTER: *** AUTH HANDSHAKE COMPLETE ***\r\n");
+						RM_DBG("RIFFMASTER: *** AUTH HANDSHAKE COMPLETE ***\r\n");
 						// A connection that got all the way to auth is a REAL one, so
 						// refresh the claim budget here rather than in teardown. See the
 						// banner on GIP_CLAIM_MAX_ATTEMPTS: resetting on teardown let a
@@ -2589,7 +2602,7 @@ static void GipHandleTransfer(const BYTE* data, int len) {
 					GipSendAck(g_gipExt.deviceHandle, &hdr);
 
 				if (payload[2] != 0x00)
-					RM_LOG("RIFFMASTER: !!! device reported auth error 0x%02X !!!\r\n", payload[2]);
+					RM_DBG("RIFFMASTER: !!! device reported auth error 0x%02X !!!\r\n", payload[2]);
 
 				// Device acknowledged HOST_HELLO at the auth layer
 				// (capture: 00 C1 00 01 00 00). Now request its hello.
@@ -2740,7 +2753,7 @@ int32_t GipInterruptComplete(DWORD trbAddr, int32_t status) {
 		static bool reported = false;
 		if (!reported) {
 			reported = true;
-			RM_LOG("RIFFMASTER: read loop STOPPED after %d unproductive completions "
+			RM_DBG("RIFFMASTER: read loop STOPPED after %d unproductive completions "
 				"(last status 0x%08X) - disconnect guard fired\r\n",
 				GIP_MAX_CONSECUTIVE_READ_ERRORS, status);
 		}
@@ -2782,7 +2795,7 @@ int32_t GipInterruptComplete(DWORD trbAddr, int32_t status) {
 int32_t GipSetConfigComplete(DWORD trbAddr, int32_t status) {
 	HidControllerExtension* ext = (HidControllerExtension*)((BYTE*)trbAddr - 36);
 
-	RM_LOG("RIFFMASTER: SET_CONFIGURATION completed status=0x%08X\r\n", status);
+	RM_DBG("RIFFMASTER: SET_CONFIGURATION completed status=0x%08X\r\n", status);
 	if (status != 0)
 		return status;
 
@@ -2835,10 +2848,10 @@ int32_t GipSetConfigComplete(DWORD trbAddr, int32_t status) {
 	NTSTATUS s = UsbdOpenEndpoint(ext->deviceHandle, USB_ENDPOINT_TYPE_INTERRUPT,
 		epAddr, pkt, interval, (DWORD*)&ext->interruptTrb);
 	if (NT_ERROR(s)) {
-		RM_LOG("RIFFMASTER: UsbdOpenEndpoint FAILED 0x%08X\r\n", s);
+		RM_DBG("RIFFMASTER: UsbdOpenEndpoint FAILED 0x%08X\r\n", s);
 		return s;
 	}
-	RM_LOG("RIFFMASTER: *** interrupt IN endpoint OPEN - starting GIP reads ***\r\n");
+	RM_DBG("RIFFMASTER: *** interrupt IN endpoint OPEN - starting GIP reads ***\r\n");
 
 	// Open the interrupt OUT endpoint too - without it we can never answer ANNOUNCE.
 	// EP 0x02 OUT, INTERRUPT, 64, bInterval 4 (docs/gip_riffmaster.md section 2).
@@ -2856,7 +2869,7 @@ int32_t GipSetConfigComplete(DWORD trbAddr, int32_t status) {
 		NTSTATUS os = UsbdOpenEndpoint(ext->deviceHandle, USB_ENDPOINT_TYPE_INTERRUPT,
 			outAddr, outPkt, outInterval, (DWORD*)&g_gipOutTrb);
 		g_gipOutOpen = !NT_ERROR(os);
-		RM_LOG("RIFFMASTER: interrupt OUT EP %02X -> 0x%08X %s\r\n",
+		RM_DBG("RIFFMASTER: interrupt OUT EP %02X -> 0x%08X %s\r\n",
 			outAddr, os, g_gipOutOpen ? "OK" : "FAILED");
 	}
 
@@ -2871,7 +2884,7 @@ int32_t GipSetConfigComplete(DWORD trbAddr, int32_t status) {
 	// This is the split that should have come before any attempted fix: it separates
 	// "having claimed the device and opened its endpoints" from "servicing it". The
 	// guitar will not work - no reads means no input and no auth.
-	RM_LOG("RIFFMASTER: interrupt reads NOT started (noread variant)\r\n");
+	RM_DBG("RIFFMASTER: interrupt reads NOT started (noread variant)\r\n");
 	return 0;
 #endif
 	memset(g_gipReadBuf, 0, sizeof(g_gipReadBuf));
@@ -2955,7 +2968,7 @@ int UsbdAddDeviceCompleteHook(deviceHandle* h, int status) {
 			static bool s_claimExhaustedLogged = false;
 			if (!s_claimExhaustedLogged) {
 				s_claimExhaustedLogged = true;
-				RM_LOG("RIFFMASTER: RiffMaster dongle detected but NOT claimed "
+				RM_DBG("RIFFMASTER: RiffMaster dongle detected but NOT claimed "
 					"(budget %d exhausted) - hard reboot, then plug dongle AFTER boot\r\n",
 					GIP_CLAIM_MAX_ATTEMPTS);
 			}
@@ -2977,7 +2990,7 @@ int UsbdAddDeviceCompleteHook(deviceHandle* h, int status) {
 			// re-claimed silently". Under `trace` the claim is always visible.
 			RM_TRACE("RIFFMASTER: TRACE CLAIM ATTEMPT %d handle=%p\r\n",
 				g_gipClaimAttempts, h);
-			RM_LOG("RIFFMASTER: *** CLAIM ATTEMPT %d on RiffMaster dongle (handle %p) ***\r\n",
+			RM_DBG("RIFFMASTER: *** CLAIM ATTEMPT %d on RiffMaster dongle (handle %p) ***\r\n",
 				g_gipClaimAttempts, h);
 			RmLogCoexistUsb("USB-CLAIM RiffMaster GIP dongle", h, status, dd, id);
 
@@ -3028,7 +3041,7 @@ int UsbdAddDeviceCompleteHook(deviceHandle* h, int status) {
 			int r = 0;
 #elif defined(RIFFMASTER_NO_CLAIM)
 			int r = UsbdAddDeviceCompleteDetour.GetOriginal<decltype(&UsbdAddDeviceCompleteHook)>()(h, status);
-			RM_LOG("RIFFMASTER: NOT claiming - passed original status 0x%08X through, "
+			RM_DBG("RIFFMASTER: NOT claiming - passed original status 0x%08X through, "
 				"driver stays %p\r\n", status, h->driver);
 #elif defined(RIFFMASTER_KEEP_DRIVER)
 			// Claim the device - so the core keeps scheduling transfers for it - but do
@@ -3046,7 +3059,7 @@ int UsbdAddDeviceCompleteHook(deviceHandle* h, int status) {
 			// to find rather than replacing it with a pointer into our plugin.
 			void* before = h->driver;
 			int r = UsbdAddDeviceCompleteDetour.GetOriginal<decltype(&UsbdAddDeviceCompleteHook)>()(h, 0);
-			RM_LOG("RIFFMASTER: claimed WITHOUT touching driver - was %p, now %p\r\n",
+			RM_DBG("RIFFMASTER: claimed WITHOUT touching driver - was %p, now %p\r\n",
 				before, h->driver);
 #else
 			h->driver = &g_gipExt;
@@ -3065,13 +3078,13 @@ int UsbdAddDeviceCompleteHook(deviceHandle* h, int status) {
 			// fault is in OPENING endpoints on a device we claimed this way. If it
 			// freezes, the bare claim is sufficient and the problem is that the core
 			// believes a driver owns a device that has none.
-			RM_LOG("RIFFMASTER: claimed and stopped (claimonly variant)\r\n");
+			RM_DBG("RIFFMASTER: claimed and stopped (claimonly variant)\r\n");
 			return r;
 #endif
 			NTSTATUS s = UsbdOpenDefaultEndpoint(h, (DWORD*)&g_gipExt.controlTrb);
 			// RM_LOG, not RM_DBG: under NO_CLAIM this is the whole question - whether
 			// the core will open an endpoint on a device it considers unowned.
-			RM_LOG("RIFFMASTER: UsbdOpenDefaultEndpoint -> 0x%08X %s\r\n",
+			RM_DBG("RIFFMASTER: UsbdOpenDefaultEndpoint -> 0x%08X %s\r\n",
 				s, NT_ERROR(s) ? "FAILED" : "OK");
 			if (NT_ERROR(s))
 				return r;
@@ -3092,13 +3105,13 @@ int UsbdAddDeviceCompleteHook(deviceHandle* h, int status) {
 			// So the queue call accepts the transfer either way, and the difference is
 			// purely whether the core ever SERVICES it. Do not read this as success or
 			// failure - it is only here to prove the call was reached and returned.
-			RM_LOG("RIFFMASTER: SET_CONFIGURATION queued -> 0x%08X (not a status)\r\n", q);
+			RM_DBG("RIFFMASTER: SET_CONFIGURATION queued -> 0x%08X (not a status)\r\n", q);
 
 #ifdef RIFFMASTER_NO_CLAIM_LATE
 			// Only now tell the core the device was not claimed - after our endpoints
 			// are open and the control transfer is already queued.
 			r = UsbdAddDeviceCompleteDetour.GetOriginal<decltype(&UsbdAddDeviceCompleteHook)>()(h, status);
-			RM_LOG("RIFFMASTER: deferred unclaim - reported 0x%08X after setup, driver=%p\r\n",
+			RM_DBG("RIFFMASTER: deferred unclaim - reported 0x%08X after setup, driver=%p\r\n",
 				status, h->driver);
 #endif
 			return r;
@@ -3363,7 +3376,7 @@ int HidAddDeviceHook(deviceHandle* deviceHandle) {
 	uint16_t productId = device_descriptor ?
 		swap_endianness_16(device_descriptor->idProduct) : 0;
 
-	RM_LOG("RIFFMASTER: COEXIST HID hook saw h=%p VID=%04X PID=%04X\r\n",
+	RM_DBG("RIFFMASTER: COEXIST HID hook saw h=%p VID=%04X PID=%04X\r\n",
 		deviceHandle, vendorId, productId);
 
 	// Kill test: log EVERY device that gets here, before any class filtering.
@@ -3378,7 +3391,7 @@ int HidAddDeviceHook(deviceHandle* deviceHandle) {
 		interface_descriptor->bInterfaceClass == 0x03 &&
 		interface_descriptor->bInterfaceSubClass == 0 &&
 		interface_descriptor->bInterfaceProtocol == 0) {
-		RM_LOG("RIFFMASTER: COEXIST HID CLAIM VID=%04X PID=%04X - riffmaster takes this "
+		RM_DBG("RIFFMASTER: COEXIST HID CLAIM VID=%04X PID=%04X - riffmaster takes this "
 			"device (UsbdSecPatch / CRKD cannot use it)\r\n", vendorId, productId);
 		
 		// Extract HID descriptor from memory right after interface descriptor
@@ -3404,7 +3417,7 @@ int HidAddDeviceHook(deviceHandle* deviceHandle) {
 		}
 
 		if (index == -1) {
-			RM_LOG("RIFFMASTER: COEXIST HID CLAIM FAILED - all 4 HID slots full "
+			RM_DBG("RIFFMASTER: COEXIST HID CLAIM FAILED - all 4 HID slots full "
 				"(passing CRKD/other to kernel)\r\n");
 			RmLogHidSlotSummary();
 			return HidAddDeviceDetour.GetOriginal<decltype(&HidAddDeviceHook)>()(deviceHandle);
@@ -3457,7 +3470,7 @@ int HidAddDeviceHook(deviceHandle* deviceHandle) {
 		return 0;
 	}
 
-	RM_LOG("RIFFMASTER: COEXIST HID pass-through VID=%04X PID=%04X class=%02X/%02X/%02X "
+	RM_DBG("RIFFMASTER: COEXIST HID pass-through VID=%04X PID=%04X class=%02X/%02X/%02X "
 		"(not claiming - UsbdSecPatch may handle)\r\n",
 		vendorId, productId,
 		interface_descriptor ? interface_descriptor->bInterfaceClass : 0xFF,

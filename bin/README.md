@@ -7,10 +7,12 @@
 Use this file for installation. The original unpatched release from Durg5's repository is
 ~324 KB and does not include the fixes in this project.
 
-## Build info (2026-08-22)
+## Build info (2026-08-25)
 
-- **MD5:** `F5BA2366FD6D1630375DF5F3AD91A4E0`
+- **MD5:** `0620F5564CA2D7E1B7F03E9FDDB66160`
 - **Size:** 96,256 bytes
+
+Previous build (2026-08-22) MD5 was `F5BA2366FD6D1630375DF5F3AD91A4E0`.
 
 ## Rebuild without the XDK
 

@@ -86,6 +86,8 @@ RiffMaster, you still want this patched build — see the table above.
 - Disconnect/reconnect mid-session without rebooting
 - **RiffMaster + UsbdSecPatch on the same console** — verified on hardware with a CRKD
   guitar and RiffMaster together in DashLaunch
+- v1.0.1 also turns off leftover notification patches that could freeze the dash when
+  you plugged a guitar in (often right after FTP)
 
 See [docs/KNOWN_ISSUES.md](docs/KNOWN_ISSUES.md) for limitations (beta software, small
 test sample, no rumble, etc.).

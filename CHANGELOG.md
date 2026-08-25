@@ -13,8 +13,23 @@ Download the patched xex from **[Releases](https://github.com/Easy301/riffmaster
 |---|---|---|
 | 1 | RSA self-test | RiffMaster works on consoles that meet the original requirements |
 | 2 | GIP-only mode + ReadState pass-through | UsbdSecPatch guitars (e.g. CRKD) stay usable alongside riffmaster |
+| 3 | Turn off leftover notify patches | Console should not freeze when you plug a guitar in |
 
 Install guide: [docs/INSTALL-FIXED.md](docs/INSTALL-FIXED.md)
+
+---
+
+## [1.0.1-fixed] — 2026-08-25
+
+Sometimes the dash froze when you plugged in a guitar (CRKD or RiffMaster), especially
+right after copying a file over FTP. The plugin was still patching Xbox notification
+code left over from the old “unknown controller mapping” popup, which this build does
+not use.
+
+That leftover patch is off now. RiffMaster and CRKD still work the same way — you do
+not need to close FTP first.
+
+Prebuilt `bin/riffmaster.xex` MD5 `0620F5564CA2D7E1B7F03E9FDDB66160`.
 
 ---
 
