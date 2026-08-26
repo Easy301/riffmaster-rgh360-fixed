@@ -46,8 +46,7 @@ connected is the case that tends to freeze.
 1. Download **`riffmaster-beta.xex`** from this release
 2. Copy to **`Hdd:\riffmaster.xex`** (replace your current file)
 3. **Hard reboot** (full power off)
-4. Confirm RiffMaster still works in the dashboard
-5. With FTP connected on your PC, plug a third-party guitar and see if the console stays up
+4. With FTP connected on your PC, plug a third-party guitar and see if the console stays up
 
 If the RiffMaster vanishes or stops working, roll back to **v1.0.0-fixed**
 (`riffmaster.xex`, MD5 `F5BA2366FD6D1630375DF5F3AD91A4E0`).
