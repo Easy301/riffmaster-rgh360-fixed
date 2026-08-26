@@ -138,7 +138,7 @@ UsbdSecPatch, etc.) while a **PC FTP client** is already connected. Aurora's FTP
 can stay on — you do not need to turn FTP off in Aurora. What matters is the open session
 on your PC (FileZilla, WinSCP, whatever you use to browse the Xbox).
 
-**Workaround until the stable fix ships:** get every third-party guitar connected and
+**Workaround until the stable fix is ready:** get every third-party guitar connected and
 working in the dashboard **before** you connect any FTP client on your PC. If you need to
 hot-plug a guitar later, close the FTP program first, plug the guitar in, then reconnect
 FTP if you want.

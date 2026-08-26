@@ -26,7 +26,7 @@ The **JRPC2 patch stays** — that's what v1.0.0 needs for the RiffMaster to sho
 
 ---
 
-## Still on v1.0.0? Do this until the stable fix ships
+## Still on v1.0.0? Do this until the stable fix is ready
 
 You do **not** need to disable FTP in Aurora.
 

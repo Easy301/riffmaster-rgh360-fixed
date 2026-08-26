@@ -114,7 +114,7 @@ riffmaster remains loaded.
 
 ### FTP and third-party guitars (v1.0.0 workaround)
 
-Until the stable freeze fix ships, this is the order that usually keeps the console happy
+Until the stable fix is ready, this is the order that usually keeps the console happy
 on **v1.0.0-fixed**:
 
 1. Plug in and power on your guitars (RiffMaster dongle, CRKD, whatever you use).
