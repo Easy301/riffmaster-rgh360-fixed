@@ -131,6 +131,23 @@ Every result was obtained with `UsbdSecPatch` flashed into NAND. In principle it
 unnecessary — the dongle is claimed after the kernel has already enumerated it, and
 `UsbdSecPatch` only removes the XSM3 auth gate. But this has never been tested without it.
 
+### FTP client + hot-plug third-party guitar may freeze `[HYPOTHESIS]`
+
+Some setups freeze when a **third-party guitar** is plugged in while a **PC FTP client**
+is actively connected to the Xbox. Aurora's FTP server can stay enabled — it is the open
+client session on your PC that matters, not toggling FTP off in Aurora.
+
+**Workaround on v1.0.0-fixed:** disconnect or quit your PC FTP program before plugging the
+guitar. You do not need to disable FTP in Aurora itself.
+
+**Order:** If the guitar is **already connected and working** in the dashboard and you
+**then** open an FTP client, you are usually much less likely to freeze than plugging a
+guitar mid-session. That matches how USB plug events vs. ongoing FTP traffic interact, but
+it has not been exhaustively tested on every client. v1.0.2-beta targets the hot-plug
+during FTP case.
+
+See [RELEASE-NOTES-v1.0.2-beta.md](RELEASE-NOTES-v1.0.2-beta.md).
+
 ### Guitar-only, dongle-only `[VERIFIED]`
 Matched strictly on VID `0E6F` / PID `0248`, interface 0, class `FF/47/D0`. Other
 RiffMaster hardware or firmware revisions with different IDs will not be claimed.

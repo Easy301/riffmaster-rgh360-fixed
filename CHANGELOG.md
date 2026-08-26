@@ -18,6 +18,22 @@ Install guide: [docs/INSTALL-FIXED.md](docs/INSTALL-FIXED.md)
 
 ---
 
+## [1.0.2-beta] — 2026-08-25
+
+**Pre-release.** Targets console freezes when a third-party guitar (e.g. CRKD) is plugged
+in while a **PC FTP client** is connected to Aurora. Early testing: RiffMaster still works
+in the dashboard. More stress testing wanted before this replaces v1.0.0.
+
+- NOPs only the mapping-assistant notify stores (type 80 + 1500 ms timer)
+- **Keeps** the JRPC2 notify patch (v1.0.1 broke the RiffMaster by removing all three)
+- File: `riffmaster-beta.xex` · MD5 `D042E7830893347D539D4C7A47DB01A0`
+
+**Stay on v1.0.0?** You do not need to turn off Aurora FTP. Disconnect your **PC FTP
+client** before plugging a third-party guitar. Guitar already working first, then opening
+FTP, is usually safer — see [release notes](docs/RELEASE-NOTES-v1.0.2-beta.md).
+
+---
+
 ## [1.0.1-fixed] — yanked 2026-08-25
 
 **Do not use this build.** Turning off leftover notify patches made the RiffMaster stop

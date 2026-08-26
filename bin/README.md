@@ -2,9 +2,10 @@
 
 | File | Description |
 |---|---|
-| **`riffmaster.xex`** | Patched retail build (~94 KB). Same file attached to [GitHub Releases](https://github.com/Easy301/riffmaster-rgh360-fixed/releases). |
+| **`riffmaster.xex`** | Stable v1.0.0-fixed (~94 KB). Default download from [Releases](https://github.com/Easy301/riffmaster-rgh360-fixed/releases/latest). |
+| **`riffmaster-beta.xex`** | v1.0.2-beta pre-release — possible FTP + third-party guitar freeze fix. See [release notes](../docs/RELEASE-NOTES-v1.0.2-beta.md). |
 
-Use this file for installation. The original unpatched release from Durg5's repository is
+Use **`riffmaster.xex`** unless you are testing the beta. The original unpatched release from Durg5's repository is
 ~324 KB and does not include the fixes in this project.
 
 ## Build info (2026-08-22)
