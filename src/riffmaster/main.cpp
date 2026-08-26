@@ -83,18 +83,6 @@
 #define RIFFMASTER_GIP_ONLY 1
 #endif
 
-// Mapping-assistant XNotify (custom type 80 + JRPC2 branch patch). GIP-only never
-// shows that UI, and the notify dispatch patch runs on EVERY USB arrival — including
-// CRKD / UsbdSecPatch guitars — which can freeze the dash when XAM's network stack is
-// busy. Skipping it restores stock XAM notify behaviour. It does not affect GIP claim,
-// auth, XAM guitar bind, or native UsbdSecPatch devices.
-// Define RIFFMASTER_FORCE_NOTIFY_PATCH to restore the upstream writes.
-#if defined(RIFFMASTER_GIP_ONLY) && !defined(RIFFMASTER_FORCE_NOTIFY_PATCH)
-#ifndef RIFFMASTER_NO_NOTIFY_PATCH
-#define RIFFMASTER_NO_NOTIFY_PATCH 1
-#endif
-#endif
-
 // ---------------------------------------------------------------------------
 // Logging levels.
 //
