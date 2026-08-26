@@ -131,24 +131,16 @@ Every result was obtained with `UsbdSecPatch` flashed into NAND. In principle it
 unnecessary — the dongle is claimed after the kernel has already enumerated it, and
 `UsbdSecPatch` only removes the XSM3 auth gate. But this has never been tested without it.
 
-### FTP + third-party guitar freeze `[HYPOTHESIS]`
+### FTP + third-party guitar freeze `[PARTLY RESOLVED]`
 
-On **v1.0.0-fixed**, some consoles freeze when you plug in a third-party guitar (CRKD,
-UsbdSecPatch, etc.) while a **PC FTP client** is already connected. Aurora's FTP server
-can stay on — you do not need to turn FTP off in Aurora. What matters is the open session
-on your PC (FileZilla, WinSCP, whatever you use to browse the Xbox).
+**v1.0.2-fixed** targets console freezes when you plug a third-party guitar (CRKD,
+UsbdSecPatch, etc.) while a **PC FTP client** is connected. Aurora's FTP server can stay
+on — the open session on your PC is what matters.
 
-**Workaround until the stable fix is ready:** get every third-party guitar connected and
-working in the dashboard **before** you connect any FTP client on your PC. If you need to
-hot-plug a guitar later, close the FTP program first, plug the guitar in, then reconnect
-FTP if you want.
+**On v1.0.0-fixed (rollback):** connect third-party guitars before you open FTP on your PC.
+Close the FTP program before hot-plugging a guitar.
 
-That order has worked on the test setup and matches what we think is going wrong (USB
-plug-in traffic colliding with an active FTP session). We have not tried every FTP client
-yet. **v1.0.2-beta** is meant to fix the hot-plug-during-FTP case so you do not have to
-babysit the order forever.
-
-See [RELEASE-NOTES-v1.0.2-beta.md](RELEASE-NOTES-v1.0.2-beta.md).
+See [RELEASE-NOTES-v1.0.2-fixed.md](RELEASE-NOTES-v1.0.2-fixed.md).
 
 ### Guitar-only, dongle-only `[VERIFIED]`
 Matched strictly on VID `0E6F` / PID `0248`, interface 0, class `FF/47/D0`. Other

@@ -1,13 +1,7 @@
-"""Build v1.0.2-beta xex: NOP mapping-assistant notify stores, keep JRPC2.
+"""Apply v1.0.2 notify patch on top of v1.0.0 base (keep JRPC2).
 
-v1.0.1 yanked because it NOPed all three notify stores and broke the RiffMaster.
-This beta only NOPs type-80 and the 1500 ms timer. JRPC2 (0x409A -> 0x4800) stays.
-
-Usage (from repo root):
-  python tools/apply_notify_beta_patch.py
-
-Requires tools/xextool.exe and bin/riffmaster.xex (v1.0.0-fixed, MD5 F5BA...).
-Output: bin/riffmaster-beta.xex
+Run after tools/apply_full_patch.py. Input: bin/riffmaster-v1.0.0-fixed.xex
+Output: bin/riffmaster.xex (and bin/riffmaster-beta.xex, same bytes)
 """
 from __future__ import annotations
 
@@ -20,10 +14,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 XEXTOOL = ROOT / "tools" / "xextool.exe"
 WORK = ROOT / "patch-work"
-SRC_XEX = ROOT / "bin" / "riffmaster.xex"
+SRC_XEX = ROOT / "bin" / "riffmaster-v1.0.0-fixed.xex"
 COPY_XEX = WORK / "riffmaster-beta-src.xex"
 EXE = WORK / "riffmaster-beta.exe"
-OUT_XEX = ROOT / "bin" / "riffmaster-beta.xex"
+OUT_XEX = ROOT / "bin" / "riffmaster.xex"
+OUT_BETA = ROOT / "bin" / "riffmaster-beta.xex"
 EXPECTED_MD5 = "F5BA2366FD6D1630375DF5F3AD91A4E0"
 
 NOP = bytes.fromhex("60000000")
@@ -99,10 +94,11 @@ def main() -> int:
     EXE.write_bytes(data)
 
     run([str(XEXTOOL), "-e", "e", "-c", "c", "-m", "r", "-r", "a", "-o", str(OUT_XEX), str(EXE)])
+    shutil.copy2(OUT_XEX, OUT_BETA)
 
     after = hashlib.md5(SRC_XEX.read_bytes()).hexdigest().upper()
     if after != EXPECTED_MD5:
-        print("ERROR: bin/riffmaster.xex was rewritten — restore from git", file=sys.stderr)
+        print(f"ERROR: {SRC_XEX} was modified — restore from git", file=sys.stderr)
         return 1
 
     out_md5 = hashlib.md5(OUT_XEX.read_bytes()).hexdigest().upper()

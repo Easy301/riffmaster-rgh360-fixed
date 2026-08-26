@@ -32,3 +32,5 @@ desktop.ini
 
 # The prebuilt plugin IS shipped - keep it despite the rules above.
 !bin/riffmaster.xex
+!bin/riffmaster-v1.0.0-fixed.xex
+!bin/riffmaster-beta.xex

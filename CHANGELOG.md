@@ -13,32 +13,39 @@ Download the patched xex from **[Releases](https://github.com/Easy301/riffmaster
 |---|---|---|
 | 1 | RSA self-test | RiffMaster works on consoles that meet the original requirements |
 | 2 | GIP-only mode + ReadState pass-through | UsbdSecPatch guitars (e.g. CRKD) stay usable alongside riffmaster |
+| 3 | Partial notify patch | Fewer freezes when plugging third-party guitars during active PC FTP |
 
 Install guide: [docs/INSTALL-FIXED.md](docs/INSTALL-FIXED.md)
 
 ---
 
-## [1.0.2-beta] — 2026-08-25
+## [1.0.2-fixed] — 2026-08-25
 
-**Pre-release.** Targets console freezes when a third-party guitar (e.g. CRKD) is plugged
-in while a **PC FTP client** is connected to Aurora. Early testing: RiffMaster still works
-in the dashboard. More stress testing wanted before this replaces v1.0.0.
+**Current stable.** Everything in v1.0.0-fixed, plus a partial notify patch for console
+freezes when a third-party guitar (e.g. CRKD) is plugged in while a **PC FTP client** is
+connected.
 
 - NOPs only the mapping-assistant notify stores (type 80 + 1500 ms timer)
 - **Keeps** the JRPC2 notify patch (v1.0.1 broke the RiffMaster by removing all three)
-- File: `riffmaster-beta.xex` · MD5 `D042E7830893347D539D4C7A47DB01A0`
+- MD5 `D042E7830893347D539D4C7A47DB01A0`
 
-**Stay on v1.0.0?** You do not need to turn off Aurora FTP. Disconnect your **PC FTP
-client** before plugging a third-party guitar. Get third-party guitars connected in the
-dashboard **before** you open any FTP client on your PC — that order usually avoids the
-freeze until the stable fix is ready. See [release notes](docs/RELEASE-NOTES-v1.0.2-beta.md).
+Roll back to [v1.0.0-fixed](https://github.com/Easy301/riffmaster-rgh360-fixed/releases/tag/v1.0.0-fixed)
+if needed (MD5 `F5BA2366FD6D1630375DF5F3AD91A4E0`). On v1.0.0, connect third-party guitars
+before opening FTP on your PC — see [release notes](docs/RELEASE-NOTES-v1.0.2-fixed.md).
+
+---
+
+## [1.0.2-beta] — 2026-08-25
+
+Superseded by **v1.0.2-fixed**. Same xex bytes (`D042E783…`).
 
 ---
 
 ## [1.0.1-fixed] — yanked 2026-08-25
 
 **Do not use this build.** Turning off leftover notify patches made the RiffMaster stop
-working. Use **v1.0.0-fixed** (`bin/riffmaster.xex`, MD5 `F5BA2366FD6D1630375DF5F3AD91A4E0`).
+working. Roll back target if v1.0.2 causes trouble: **v1.0.0-fixed**
+(`MD5 F5BA2366FD6D1630375DF5F3AD91A4E0`).
 
 ---
 
