@@ -34,7 +34,7 @@ which made the RiffMaster work on Xbox 360 in the first place. **Durg5 and
 [EinTim23](https://github.com/EinTim23/hiddriver360) deserve the vast majority of credit**
 for that work — see [CREDITS.md](CREDITS.md).
 
-Two problems I discovered on my setup that the original patch did not handle:
+Two gaps in the original patch:
 
 | | Original release | This release |
 |---|---|---|

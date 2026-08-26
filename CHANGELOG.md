@@ -25,8 +25,7 @@ Install guide: [docs/INSTALL-FIXED.md](docs/INSTALL-FIXED.md)
 freezes when a third-party guitar (e.g. CRKD) is plugged in while a **PC FTP client** is
 connected.
 
-- NOPs only the mapping-assistant notify stores (type 80 + 1500 ms timer)
-- **Keeps** the JRPC2 notify patch (v1.0.1 broke the RiffMaster by removing all three)
+- NOPs only the mapping-assistant notify stores (type 80 + 1500 ms timer); JRPC2 stays
 - MD5 `D042E7830893347D539D4C7A47DB01A0`
 
 Roll back to [v1.0.0-fixed](https://github.com/Easy301/riffmaster-rgh360-fixed/releases/tag/v1.0.0-fixed)
@@ -38,14 +37,6 @@ before opening FTP on your PC — see [release notes](docs/RELEASE-NOTES-v1.0.2-
 ## [1.0.2-beta] — 2026-08-25
 
 Superseded by **v1.0.2-fixed**. Same xex bytes (`D042E783…`).
-
----
-
-## [1.0.1-fixed] — yanked 2026-08-25
-
-**Do not use this build.** Turning off leftover notify patches made the RiffMaster stop
-working. Roll back target if v1.0.2 causes trouble: **v1.0.0-fixed**
-(`MD5 F5BA2366FD6D1630375DF5F3AD91A4E0`).
 
 ---
 

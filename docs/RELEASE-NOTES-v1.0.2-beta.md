@@ -20,9 +20,8 @@ Some consoles freeze when you plug in a third-party guitar (CRKD over UsbdSecPat
 while a **PC FTP client** is connected to the Xbox. Aurora's FTP server can stay running —
 it's the active client on your PC that matters, not turning FTP off in Aurora.
 
-v1.0.1 broke the RiffMaster because it killed **all** the leftover notify patches. This
-beta only removes the two mapping-assistant ones (custom type 80 and the 1500 ms timer).
-The **JRPC2 patch stays** — that's what v1.0.0 needs for the RiffMaster to show up.
+This beta NOPs the mapping-assistant notify writes (type 80 and the 1500 ms timer) and
+leaves the JRPC2 patch alone.
 
 ---
 

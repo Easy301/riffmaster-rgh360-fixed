@@ -32,10 +32,10 @@ See [NOTICE.md](NOTICE.md) and the [original README](https://github.com/Durg5/ri
 
 | Contributor | Role |
 |---|---|
-| **Gregory** | Hardware testing, patches, and maintaining this release |
+| **[Easy301](https://github.com/Easy301)** | Community fork — hardware testing, patches, release maintenance |
 
-I added three small fixes on top of Durg5's original driver for setups that did not work
-on my console. This is not an official build from Durg5 or EinTim23.
+This fork adds three small fixes on top of Durg5's original driver for hardware the
+upstream build did not support. Not an official build from Durg5 or EinTim23.
 
 ---
 

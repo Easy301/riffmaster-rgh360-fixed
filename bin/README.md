@@ -14,8 +14,7 @@ the fixes in this project.
 - **MD5:** `D042E7830893347D539D4C7A47DB01A0`
 - **Size:** 96,256 bytes
 
-v1.0.1-fixed was pulled — it broke RiffMaster. v1.0.0-fixed is still on GitHub if you
-need to roll back.
+Roll back to **v1.0.0-fixed** on GitHub if you need the previous stable build.
 
 ## Rebuild without the XDK
 

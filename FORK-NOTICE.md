@@ -5,8 +5,8 @@ This is a **patched community release** of
 on **[EinTim23/hiddriver360](https://github.com/EinTim23/hiddriver360)**.
 
 Durg5 and EinTim23 did the engineering that makes a RiffMaster guitar work on Xbox 360.
-I added three targeted fixes for hardware setups the original patch did not support on my
-console. See [CREDITS.md](CREDITS.md).
+This fork adds three targeted fixes for hardware setups the original patch did not
+support. See [CREDITS.md](CREDITS.md).
 
 ---
 

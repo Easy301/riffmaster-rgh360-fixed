@@ -9,12 +9,9 @@ Download **`riffmaster.xex`** from this release. Copy to `Hdd:\riffmaster.xex`, 
 | Size | 96,256 bytes |
 
 Includes everything from **v1.0.0-fixed** (RSA auth, GIP-only, CRKD pass-through), plus a
-partial notify patch that targets console freezes when you plug a third-party guitar while
-a PC FTP client is connected.
-
-v1.0.1 was yanked — it turned off **all** notify patches and the RiffMaster stopped working.
-This build only removes the two mapping-assistant notify writes (type 80 and the 1500 ms
-timer). The **JRPC2 patch stays**.
+small patch for console freezes when you plug a third-party guitar while a PC FTP client is
+connected. It NOPs the mapping-assistant notify writes (type 80 and the 1500 ms timer) and
+leaves the JRPC2 patch alone.
 
 ---
 
