@@ -47,6 +47,9 @@ Two problems I discovered on my setup that the original patch did not handle:
 
 More detail: [FORK-NOTICE.md](FORK-NOTICE.md) · [CHANGELOG.md](CHANGELOG.md)
 
+**On v1.0.0 and use FTP?** Connect third-party guitars before you open an FTP client on
+your PC. Aurora FTP can stay on. Details in [docs/INSTALL-FIXED.md](docs/INSTALL-FIXED.md).
+
 ---
 
 ## Quick start

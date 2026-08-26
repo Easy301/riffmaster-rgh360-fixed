@@ -110,6 +110,19 @@ riffmaster remains loaded.
 | Wrong kernel | Plugin only loads on kernel 17559 or 17489 |
 | Guitar does not work on the 360 | Downloaded the original ~324 KB file instead of this ~94 KB patched build |
 | Second guitar unresponsive while riffmaster is loaded | Use the patched release from this repo (~94 KB) |
+| Console freezes when plugging CRKD (or similar) | On **v1.0.0**, connect third-party guitars **before** opening FTP on your PC. Close the FTP client before hot-plugging. Aurora FTP can stay on. See [KNOWN_ISSUES.md](KNOWN_ISSUES.md) or try [v1.0.2-beta](https://github.com/Easy301/riffmaster-rgh360-fixed/releases/tag/v1.0.2-beta) |
+
+### FTP and third-party guitars (v1.0.0 workaround)
+
+Until the stable freeze fix ships, this is the order that usually keeps the console happy
+on **v1.0.0-fixed**:
+
+1. Plug in and power on your guitars (RiffMaster dongle, CRKD, whatever you use).
+2. Wait until they show up in the dashboard.
+3. **Then** open FileZilla, WinSCP, or whatever FTP client you use on your PC.
+
+You do not need to turn off FTP in Aurora. If you need to plug a guitar in later, close the
+FTP program on your PC first.
 
 For advanced troubleshooting (base address conflicts, debug logging, etc.), see
 [INSTALL.md](INSTALL.md) from the original project.

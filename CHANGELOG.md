@@ -29,8 +29,9 @@ in the dashboard. More stress testing wanted before this replaces v1.0.0.
 - File: `riffmaster-beta.xex` · MD5 `D042E7830893347D539D4C7A47DB01A0`
 
 **Stay on v1.0.0?** You do not need to turn off Aurora FTP. Disconnect your **PC FTP
-client** before plugging a third-party guitar. Guitar already working first, then opening
-FTP, is usually safer — see [release notes](docs/RELEASE-NOTES-v1.0.2-beta.md).
+client** before plugging a third-party guitar. Get third-party guitars connected in the
+dashboard **before** you open any FTP client on your PC — that order usually avoids the
+freeze until we ship a stable fix. See [release notes](docs/RELEASE-NOTES-v1.0.2-beta.md).
 
 ---
 

@@ -131,20 +131,22 @@ Every result was obtained with `UsbdSecPatch` flashed into NAND. In principle it
 unnecessary — the dongle is claimed after the kernel has already enumerated it, and
 `UsbdSecPatch` only removes the XSM3 auth gate. But this has never been tested without it.
 
-### FTP client + hot-plug third-party guitar may freeze `[HYPOTHESIS]`
+### FTP + third-party guitar freeze `[HYPOTHESIS]`
 
-Some setups freeze when a **third-party guitar** is plugged in while a **PC FTP client**
-is actively connected to the Xbox. Aurora's FTP server can stay enabled — it is the open
-client session on your PC that matters, not toggling FTP off in Aurora.
+On **v1.0.0-fixed**, some consoles freeze when you plug in a third-party guitar (CRKD,
+UsbdSecPatch, etc.) while a **PC FTP client** is already connected. Aurora's FTP server
+can stay on — you do not need to turn FTP off in Aurora. What matters is the open session
+on your PC (FileZilla, WinSCP, whatever you use to browse the Xbox).
 
-**Workaround on v1.0.0-fixed:** disconnect or quit your PC FTP program before plugging the
-guitar. You do not need to disable FTP in Aurora itself.
+**Workaround until the stable fix ships:** get every third-party guitar connected and
+working in the dashboard **before** you connect any FTP client on your PC. If you need to
+hot-plug a guitar later, close the FTP program first, plug the guitar in, then reconnect
+FTP if you want.
 
-**Order:** If the guitar is **already connected and working** in the dashboard and you
-**then** open an FTP client, you are usually much less likely to freeze than plugging a
-guitar mid-session. That matches how USB plug events vs. ongoing FTP traffic interact, but
-it has not been exhaustively tested on every client. v1.0.2-beta targets the hot-plug
-during FTP case.
+That order has worked on the test setup and matches what we think is going wrong (USB
+plug-in traffic colliding with an active FTP session). We have not tried every FTP client
+yet. **v1.0.2-beta** is meant to fix the hot-plug-during-FTP case so you do not have to
+babysit the order forever.
 
 See [RELEASE-NOTES-v1.0.2-beta.md](RELEASE-NOTES-v1.0.2-beta.md).
 

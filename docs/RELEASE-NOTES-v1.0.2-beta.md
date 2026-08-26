@@ -1,48 +1,43 @@
 # v1.0.2-beta — FTP / third-party guitar freeze fix (beta)
 
-**Pre-release.** Dashboard responsiveness looks good on early testing. More CRKD + FTP
-stress testing is still wanted before this replaces v1.0.0 as the default download.
+**Pre-release.** RiffMaster still shows up in the dashboard on early testing. We want more
+CRKD + FTP hammering before this replaces v1.0.0 as the default download.
 
-Download **`riffmaster-beta.xex`** from this release. Copy to `Hdd:\riffmaster.xex`, hard
-reboot, then test.
+Download **`riffmaster-beta.xex`**, copy to `Hdd:\riffmaster.xex`, hard reboot, then test.
 
 | | v1.0.0-fixed (stable) | v1.0.2-beta (this release) |
 |---|---|---|
 | File | `riffmaster.xex` | `riffmaster-beta.xex` |
 | MD5 | `F5BA2366FD6D1630375DF5F3AD91A4E0` | `D042E7830893347D539D4C7A47DB01A0` |
-| RiffMaster | Verified daily driver | Early beta — RiffMaster works in dashboard so far |
+| RiffMaster | Verified daily driver | Early beta — works in dashboard so far |
 | FTP + CRKD plug | May freeze console | Targets that freeze |
 
 ---
 
 ## What this tries to fix
 
-Some setups freeze when a **third-party guitar** (e.g. CRKD over UsbdSecPatch) is plugged
-in while an **FTP client on your PC is connected** to the Xbox (Aurora's FTP server can
-stay on — it is the **active client session** that matters).
+Some consoles freeze when you plug in a third-party guitar (CRKD over UsbdSecPatch, etc.)
+while a **PC FTP client** is connected to the Xbox. Aurora's FTP server can stay running —
+it's the active client on your PC that matters, not turning FTP off in Aurora.
 
-v1.0.1 yanked that fix because it turned off **all** leftover XAM notify patches and the
-RiffMaster stopped working. This beta only removes the two **mapping-assistant** notify
-writes (custom type 80 and the 1500 ms timer). The **JRPC2 USB-notify patch stays**, which
-is what v1.0.0 needs for the RiffMaster to show up.
+v1.0.1 broke the RiffMaster because it killed **all** the leftover notify patches. This
+beta only removes the two mapping-assistant ones (custom type 80 and the 1500 ms timer).
+The **JRPC2 patch stays** — that's what v1.0.0 needs for the RiffMaster to show up.
 
 ---
 
-## If you stay on v1.0.0-fixed (recommended until beta is confirmed)
+## Still on v1.0.0? Do this until the stable fix ships
 
-You do **not** need to disable FTP in Aurora. Leave Aurora's FTP server running if you want.
+You do **not** need to disable FTP in Aurora.
 
-**Do this instead:** close or disconnect your **PC FTP program** (FileZilla, WinSCP, Aurora
-file manager on PC, etc.) **before** you plug in a third-party guitar. Reconnect FTP after
-the guitar is up if you need it.
+**Simple rule:** get your third-party guitars connected and working in the dashboard
+**before** you open any FTP client on your PC.
 
-That workaround avoids the freeze path most of the time. It does not help if you hot-plug
-the guitar while a client is already connected.
+If you need to plug a guitar in later, close FileZilla (or whatever you use) first, plug
+the guitar in, wait until it's up, then reconnect FTP.
 
-**Guitar already plugged in first?** Usually safer. If the RiffMaster (or CRKD) is already
-working in the dashboard and *then* you open an FTP client, you are much less likely to
-hit the freeze than plugging a guitar mid-session. We have not stress-tested every order
-yet — report back if FTP-after-guitar still freezes on v1.0.0.
+That order has been fine on the test console. Plugging a guitar **while** FTP is already
+connected is the case that tends to freeze.
 
 ---
 
@@ -52,9 +47,9 @@ yet — report back if FTP-after-guitar still freezes on v1.0.0.
 2. Copy to **`Hdd:\riffmaster.xex`** (replace your current file)
 3. **Hard reboot** (full power off)
 4. Confirm RiffMaster still works in the dashboard
-5. With an FTP client connected, plug a third-party guitar and see if the console stays up
+5. With FTP connected on your PC, plug a third-party guitar and see if the console stays up
 
-If the RiffMaster breaks or the dashboard guitar vanishes, roll back to **v1.0.0-fixed**
+If the RiffMaster vanishes or stops working, roll back to **v1.0.0-fixed**
 (`riffmaster.xex`, MD5 `F5BA2366FD6D1630375DF5F3AD91A4E0`).
 
 ---
