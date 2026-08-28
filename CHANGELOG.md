@@ -12,16 +12,29 @@ Download the patched xex from **[Releases](https://github.com/Easy301/riffmaster
 | # | Fix | User impact |
 |---|---|---|
 | 1 | RSA self-test | RiffMaster works on consoles that meet the original requirements |
-| 2 | GIP-only mode + ReadState pass-through | UsbdSecPatch guitars (e.g. CRKD) stay usable alongside riffmaster |
+| 2 | GIP-only mode + ReadState pass-through | UsbdSecPatch guitars stay usable alongside riffmaster |
 | 3 | Partial notify patch | Fewer freezes when plugging third-party guitars during active PC FTP |
 
 Install guide: [docs/INSTALL-FIXED.md](docs/INSTALL-FIXED.md)
 
 ---
 
+## [1.0.3-fixed] — 2026-08-27
+
+**Current stable.** v1.0.2 still installed HID add/remove hooks. CRKD kept working
+because it is XInput, not HID — so the bug was easy to miss. Wired HID guitars
+(Santroller / Retro Cult Revival Kit) got claimed and went dead with no mapping popup.
+
+This build NOPs the real DllMain `HidAddDeviceDetour.Install` / `HidRemoveDeviceDetour.Install`
+sites. UsbdSecPatch third-party guitars should work with riffmaster loaded.
+
+- MD5 `F78D30F691ED3CDCDDB7197E3C94E32C`
+
+---
+
 ## [1.0.2-fixed] — 2026-08-25
 
-**Current stable.** Everything in v1.0.0-fixed, plus a partial notify patch for console
+Superseded by **v1.0.3-fixed** for HID coexistence. Everything in v1.0.0-fixed, plus a partial notify patch for console
 freezes when a third-party guitar (e.g. CRKD) is plugged in while a **PC FTP client** is
 connected.
 

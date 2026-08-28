@@ -39,7 +39,7 @@ Two gaps in the original patch:
 | | Original release | This release |
 |---|---|---|
 | **RiffMaster** | Guitar failed to work when connected to the 360 | Should work on any console that meets the [original requirements](#requirements) |
-| **Other guitars (UsbdSecPatch)** | UsbdSecPatch guitars (e.g. CRKD) were unusable while riffmaster was loaded | Riffmaster and UsbdSecPatch guitars can run together |
+| **Other guitars (UsbdSecPatch)** | UsbdSecPatch guitars were unusable while riffmaster was loaded | Riffmaster and UsbdSecPatch guitars can run together (v1.0.3: HID + XInput) |
 
 > **Use the patched `riffmaster.xex` from [Releases](https://github.com/Easy301/riffmaster-rgh360-fixed/releases/latest)** (~94 KB).
 > The original unpatched file from Durg5's repo is ~324 KB. **You still need this build

@@ -109,8 +109,8 @@ riffmaster remains loaded.
 | Plugin does nothing | `launch.ini` not saved, wrong file path, or tray was open at boot |
 | Wrong kernel | Plugin only loads on kernel 17559 or 17489 |
 | Guitar does not work on the 360 | Downloaded the original ~324 KB file instead of this ~94 KB patched build |
-| Second guitar unresponsive while riffmaster is loaded | Use the patched release from this repo (~94 KB) |
-| Console freezes when plugging CRKD (or similar) | Use **v1.0.2-fixed** from [Releases](https://github.com/Easy301/riffmaster-rgh360-fixed/releases/latest). On v1.0.0 rollback: connect guitars before FTP on your PC |
+| Second guitar unresponsive while riffmaster is loaded | Use **v1.0.3-fixed** or later (~94 KB). v1.0.2 still claimed HID guitars (Revival Kit) even though CRKD worked |
+| Console freezes when plugging CRKD (or similar) | Use **v1.0.2-fixed or later**. On v1.0.0 rollback: connect guitars before FTP on your PC |
 
 ### FTP and third-party guitars
 
@@ -137,8 +137,8 @@ dongle may look paired, but the console never receives input. This build correct
 ### Coexistence with UsbdSecPatch
 
 The original release can intercept unknown USB controllers for its own HID mapping layer.
-Second guitars that rely on UsbdSecPatch (e.g. CRKD) became unresponsive and unusable
-unless riffmaster was unloaded. This build limits riffmaster to the RiffMaster GIP path
-so both plugins can run together.
+Second guitars that rely on UsbdSecPatch became unresponsive unless riffmaster was unloaded.
+v1.0.2 fixed CRKD (XInput) but still claimed wired HID guitars. **v1.0.3-fixed** NOPs the
+real HID Install hooks so UsbdSecPatch instruments should work with riffmaster loaded.
 
 Source changes and patch offsets: [CHANGELOG.md](../CHANGELOG.md)

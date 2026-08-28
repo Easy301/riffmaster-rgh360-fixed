@@ -24,9 +24,9 @@ differs from the one used during the original author's testing.
 
 Some players use **UsbdSecPatch** for other third-party guitars on the same modded console
 (for example CRKD-type instruments). With the original release loaded, those guitars were
-unresponsive and unusable unless riffmaster was unloaded — often with a mapping popup on
-the dashboard. This release lets the RiffMaster dongle and UsbdSecPatch-based guitars
-operate in parallel.
+unresponsive unless riffmaster was unloaded — often with a mapping popup. v1.0.2 still
+claimed wired HID guitars (Revival Kit) even though CRKD worked; **v1.0.3** NOPs the real
+HID Install hooks. The RiffMaster dongle and UsbdSecPatch guitars should run together.
 
 ---
 

@@ -24,10 +24,16 @@ OUT_XEX = ROOT / "bin" / "riffmaster.xex"
 
 NOP = bytes.fromhex("60000000")
 RSA_PATCH_OFF = 0x14678
+# 0x1C248 / 0x1C260 were the WRONG Install() calls (not DllMain HID).
+# Real retail HID add/remove Install() sites are 0x18788 / 0x187C8 — see
+# tools/apply_coexist_hid_install.py. Mapping thread NOP is still correct.
 GIP_ONLY_NOPS = [
-    (0x1C248, "HidAddDeviceDetour.Install"),
-    (0x1C260, "HidRemoveDeviceDetour.Install"),
+    (0x1C248, "wrong-site Install (legacy v1.0.0)"),
+    (0x1C260, "wrong-site Install (legacy v1.0.0)"),
     (0x1C2B4, "MappingManagerThreadProc launch"),
+    (0x18764, "devkit HidAddDeviceDetour.Install"),
+    (0x18788, "retail HidAddDeviceDetour.Install"),
+    (0x187C8, "retail HidRemoveDeviceDetour.Install"),
 ]
 HID_READSTATE_OFF = 0x17E2C
 HID_READSTATE_OLD = bytes.fromhex("41980334")
