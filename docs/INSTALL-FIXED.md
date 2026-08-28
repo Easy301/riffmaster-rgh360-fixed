@@ -109,16 +109,13 @@ riffmaster remains loaded.
 | Plugin does nothing | `launch.ini` not saved, wrong file path, or tray was open at boot |
 | Wrong kernel | Plugin only loads on kernel 17559 or 17489 |
 | Guitar does not work on the 360 | Downloaded the original ~324 KB file instead of this ~94 KB patched build |
-| Second guitar unresponsive while riffmaster is loaded | Use **v1.0.3-fixed** or later (~94 KB). v1.0.2 still claimed HID guitars (Revival Kit) even though CRKD worked |
-| Console freezes when plugging CRKD (or similar) | Use **v1.0.2-fixed or later**. On v1.0.0 rollback: connect guitars before FTP on your PC |
+| Second guitar unresponsive or console freezes on plug | Use **v1.0.4-fixed** (~94 KB). Older in-between builds could still claim HID guitars |
 
 ### FTP and third-party guitars
 
-**v1.0.2-fixed** targets freezes when you plug a third-party guitar while a PC FTP client
-is connected. Aurora FTP can stay on.
-
-If you roll back to **v1.0.0-fixed**, connect guitars before you open FTP on your PC. Close
-the FTP program before hot-plugging.
+On the current build, Aurora FTP can stay on. If you roll back to **v1.0.0-fixed**,
+connect guitars before you open FTP on your PC, and close the FTP program before
+hot-plugging.
 
 For advanced troubleshooting (base address conflicts, debug logging, etc.), see
 [INSTALL.md](INSTALL.md) from the original project.
@@ -138,7 +135,8 @@ dongle may look paired, but the console never receives input. This build correct
 
 The original release can intercept unknown USB controllers for its own HID mapping layer.
 Second guitars that rely on UsbdSecPatch became unresponsive unless riffmaster was unloaded.
-v1.0.2 fixed CRKD (XInput) but still claimed wired HID guitars. **v1.0.3-fixed** NOPs the
-real HID Install hooks so UsbdSecPatch instruments should work with riffmaster loaded.
+That took a few iterations to get right — CRKD (XInput) looked fine while wired HID
+guitars (Revival Kit and similar) still got claimed. **v1.0.4-fixed** hands those devices
+back so UsbdSecPatch can own them.
 
 Source changes and patch offsets: [CHANGELOG.md](../CHANGELOG.md)

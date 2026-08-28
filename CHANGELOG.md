@@ -12,44 +12,26 @@ Download the patched xex from **[Releases](https://github.com/Easy301/riffmaster
 | # | Fix | User impact |
 |---|---|---|
 | 1 | RSA self-test | RiffMaster works on consoles that meet the original requirements |
-| 2 | GIP-only mode + ReadState pass-through | UsbdSecPatch guitars stay usable alongside riffmaster |
-| 3 | Partial notify patch | Fewer freezes when plugging third-party guitars during active PC FTP |
+| 2 | HID pass-through | UsbdSecPatch guitars stay usable alongside riffmaster |
+| 3 | Notify patch | Fewer freezes when plugging a third-party guitar while a PC FTP client is connected |
 
 Install guide: [docs/INSTALL-FIXED.md](docs/INSTALL-FIXED.md)
 
 ---
 
-## [1.0.3-fixed] — 2026-08-27
+## [1.0.4-fixed] — 2026-08-27
 
-**Current stable.** v1.0.2 still installed HID add/remove hooks. CRKD kept working
-because it is XInput, not HID — so the bug was easy to miss. Wired HID guitars
-(Santroller / Retro Cult Revival Kit) got claimed and went dead with no mapping popup.
+**Current stable.** MD5 `8994AF9F905F823F716A9E460D5971DB`
 
-This build NOPs the real DllMain `HidAddDeviceDetour.Install` / `HidRemoveDeviceDetour.Install`
-sites. UsbdSecPatch third-party guitars should work with riffmaster loaded.
+Getting other USB guitars to work with riffmaster still loaded took a few iterations.
+CRKD looked fine early because it enumerates as XInput, so it never walked into the HID
+claim. Wired HID guitars (Revival Kit, Santroller, and similar) still got stolen, went
+dead, and could freeze the console on plug.
 
-- MD5 `F78D30F691ED3CDCDDB7197E3C94E32C`
+1.0.4 is the build that actually stops that. The HID hook hands those devices back to the
+original driver so UsbdSecPatch can own them. The RiffMaster GIP path is unchanged.
 
----
-
-## [1.0.2-fixed] — 2026-08-25
-
-Superseded by **v1.0.3-fixed** for HID coexistence. Everything in v1.0.0-fixed, plus a partial notify patch for console
-freezes when a third-party guitar (e.g. CRKD) is plugged in while a **PC FTP client** is
-connected.
-
-- NOPs only the mapping-assistant notify stores (type 80 + 1500 ms timer); JRPC2 stays
-- MD5 `D042E7830893347D539D4C7A47DB01A0`
-
-Roll back to [v1.0.0-fixed](https://github.com/Easy301/riffmaster-rgh360-fixed/releases/tag/v1.0.0-fixed)
-if needed (MD5 `F5BA2366FD6D1630375DF5F3AD91A4E0`). On v1.0.0, connect third-party guitars
-before opening FTP on your PC — see [release notes](docs/RELEASE-NOTES-v1.0.2-fixed.md).
-
----
-
-## [1.0.2-beta] — 2026-08-25
-
-Superseded by **v1.0.2-fixed**. Same xex bytes (`D042E783…`).
+Version numbers 1.0.1–1.0.3 were the in-between builds. Use this one.
 
 ---
 
@@ -57,6 +39,8 @@ Superseded by **v1.0.2-fixed**. Same xex bytes (`D042E783…`).
 
 **Tested on:** RGH Xbox 360, kernel 17559, Aurora 0.7b2 — PDP RiffMaster + CRKD guitar
 (UsbdSecPatch), both plugins in DashLaunch.
+
+- MD5 `F5BA2366FD6D1630375DF5F3AD91A4E0`
 
 ### Fixed
 
@@ -66,9 +50,8 @@ Superseded by **v1.0.2-fixed**. Same xex bytes (`D042E783…`).
    actually fails.
 
 2. **UsbdSecPatch devices hijacked by HID mapping**  
-   Inherited hiddriver360 HID hooks claimed third-party guitars (e.g. CRKD) as unknown USB
-   pads and showed *"Unknown controller connected. Starting mapping process..."* on the
-   dashboard. GIP-only mode disables those detours and the mapping assistant thread.
+   Inherited hiddriver360 HID hooks claimed third-party guitars as unknown USB pads and
+   showed *"Unknown controller connected. Starting mapping process..."* on the dashboard.
 
 3. **UsbdSecPatch guitars connect but buttons do nothing**  
    `XInputdReadStateHook` intercepted native USB guitar contexts (`>= 0x10000005`) and

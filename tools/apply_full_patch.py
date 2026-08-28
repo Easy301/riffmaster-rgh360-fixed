@@ -1,7 +1,7 @@
 """Apply all current fixes to stock riffmaster.xex (no XDK required).
 
-Patches: RSA self-test, GIP-only HID/mapping NOPs, ReadState pass-through.
-
+Patches: RSA self-test, HID Install NOPs, HID class pass-through, mapping-thread NOP,
+ReadState pass-through.
 
 Usage (from repo root):
   python tools/apply_full_patch.py
@@ -38,6 +38,10 @@ GIP_ONLY_NOPS = [
 HID_READSTATE_OFF = 0x17E2C
 HID_READSTATE_OLD = bytes.fromhex("41980334")
 HID_READSTATE_NEW = bytes.fromhex("48000334")
+# HidAddDeviceHook: class==3 claimed the device. Always take "Unrelated USB" path.
+HID_CLASS_BNE_OFF = 0x1765C
+HID_CLASS_BNE_OLD = bytes.fromhex("409A0300")
+HID_CLASS_BNE_NEW = bytes.fromhex("48000300")
 
 
 def find_input() -> Path:
@@ -75,6 +79,15 @@ def patch_exe(data: bytearray) -> None:
         data[HID_READSTATE_OFF : HID_READSTATE_OFF + 4] = HID_READSTATE_NEW
     else:
         raise RuntimeError(f"Unexpected bytes @ 0x{HID_READSTATE_OFF:X}: {old_rs.hex()}")
+
+    old_hid = data[HID_CLASS_BNE_OFF : HID_CLASS_BNE_OFF + 4]
+    if old_hid == HID_CLASS_BNE_NEW:
+        print(f"  HID pass-through @ 0x{HID_CLASS_BNE_OFF:X}: already patched")
+    elif old_hid == HID_CLASS_BNE_OLD:
+        print(f"  HID pass-through @ 0x{HID_CLASS_BNE_OFF:X}: {old_hid.hex()} -> {HID_CLASS_BNE_NEW.hex()}")
+        data[HID_CLASS_BNE_OFF : HID_CLASS_BNE_OFF + 4] = HID_CLASS_BNE_NEW
+    else:
+        raise RuntimeError(f"Unexpected bytes @ 0x{HID_CLASS_BNE_OFF:X}: {old_hid.hex()}")
 
 
 def main() -> int:
