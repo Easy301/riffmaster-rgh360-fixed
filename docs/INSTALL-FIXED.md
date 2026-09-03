@@ -109,13 +109,12 @@ riffmaster remains loaded.
 | Plugin does nothing | `launch.ini` not saved, wrong file path, or tray was open at boot |
 | Wrong kernel | Plugin only loads on kernel 17559 or 17489 |
 | Guitar does not work on the 360 | Downloaded the original ~324 KB file instead of this ~94 KB patched build |
-| Second guitar unresponsive or console freezes on plug | Use **v1.0.4-fixed** (~94 KB). Older in-between builds could still claim HID guitars |
+| Second guitar unresponsive or console freezes on plug | Download **1.04 stable** from [Releases](https://github.com/Easy301/riffmaster-rgh360-fixed/releases/latest) (~94 KB). Replace `Hdd:\riffmaster.xex` and hard reboot |
 
 ### FTP and third-party guitars
 
-On the current build, Aurora FTP can stay on. If you roll back to **v1.0.0-fixed**,
-connect guitars before you open FTP on your PC, and close the FTP program before
-hot-plugging.
+On **1.04 stable**, Aurora FTP can stay on. If you still see freezes, close the PC FTP
+client before hot-plugging a guitar.
 
 For advanced troubleshooting (base address conflicts, debug logging, etc.), see
 [INSTALL.md](INSTALL.md) from the original project.
@@ -136,7 +135,7 @@ dongle may look paired, but the console never receives input. This build correct
 The original release can intercept unknown USB controllers for its own HID mapping layer.
 Second guitars that rely on UsbdSecPatch became unresponsive unless riffmaster was unloaded.
 That took a few iterations to get right — CRKD (XInput) looked fine while wired HID
-guitars (Revival Kit and similar) still got claimed. **v1.0.4-fixed** hands those devices
+guitars (Revival Kit and similar) still got claimed. **1.04 stable** hands those devices
 back so UsbdSecPatch can own them.
 
 Source changes and patch offsets: [CHANGELOG.md](../CHANGELOG.md)

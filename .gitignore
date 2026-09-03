@@ -7,6 +7,7 @@ bin/riffmaster-original.xex
 bin/riffmaster-patched.xex
 bin/riffmaster-coexist*.xex
 bin/riffmaster-giponly.xex
+bin/riffmaster-v1.0.*.xex
 bin/desktop-working-decrypted.xex
 
 src/riffmaster/Release Retail/
@@ -32,5 +33,3 @@ desktop.ini
 
 # The prebuilt plugin IS shipped - keep it despite the rules above.
 !bin/riffmaster.xex
-!bin/riffmaster-v1.0.0-fixed.xex
-!bin/riffmaster-beta.xex

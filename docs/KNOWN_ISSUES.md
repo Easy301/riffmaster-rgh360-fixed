@@ -133,12 +133,10 @@ unnecessary — the dongle is claimed after the kernel has already enumerated it
 
 ### FTP + third-party guitar freeze `[PARTLY RESOLVED]`
 
-The current build (**v1.0.4-fixed**) includes the notify patch for freezes when you plug a
-third-party guitar while a **PC FTP client** is connected. Aurora's FTP server can stay
-on — the open session on your PC is what matters.
-
-**On v1.0.0-fixed (rollback):** connect third-party guitars before you open FTP on your PC.
-Close the FTP program before hot-plugging a guitar.
+**1.04 stable** includes the notify patch for freezes when you plug a third-party guitar
+while a **PC FTP client** is connected. Aurora's FTP server can stay on — the open session
+on your PC is what matters. If you still see freezes, close the FTP program before
+hot-plugging a guitar.
 
 ### Guitar-only, dongle-only `[VERIFIED]`
 Matched strictly on VID `0E6F` / PID `0248`, interface 0, class `FF/47/D0`. Other
